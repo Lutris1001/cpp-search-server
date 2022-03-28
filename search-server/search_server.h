@@ -78,18 +78,12 @@ private:
 };
 
 template <typename StringContainer>
-explicit SearchServer::SearchServer(const StringContainer& stop_words)
+SearchServer::SearchServer(const StringContainer& stop_words)
         : stop_words_(MakeUniqueNonEmptyStrings(stop_words))  // Extract non-empty stop words
 {
     if (!all_of(stop_words_.begin(), stop_words_.end(), SearchServer::IsValidWord)) {
         throw invalid_argument("Some of stop words are invalid"s);
     }
-}
-
-explicit SearchServer::SearchServer(const string& stop_words_text)
-        : SearchServer(SplitIntoWords(stop_words_text))  // Invoke delegating constructor
-// from string container
-{
 }
 
 template <typename DocumentPredicate>
@@ -110,24 +104,6 @@ vector<Document> SearchServer::FindTopDocuments(const string& raw_query, Documen
     }
 
     return matched_documents;
-}
-
-static bool SearchServer::IsValidWord(const string& word) {
-    // A valid word must not contain special characters
-    return none_of(word.begin(), word.end(), [](char c) {
-        return c >= '\0' && c < ' ';
-    });
-}
-
-static int SearchServer::ComputeAverageRating(const vector<int>& ratings) {
-    if (ratings.empty()) {
-        return 0;
-    }
-    int rating_sum = 0;
-    for (const int rating : ratings) {
-        rating_sum += rating;
-    }
-    return rating_sum / static_cast<int>(ratings.size());
 }
 
 template <typename DocumentPredicate>

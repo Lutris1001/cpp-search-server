@@ -2,11 +2,18 @@
 #include <vector>
 #include <cmath>
 #include <stdexcept>
+#include <numeric>
 #include "document.h"
 #include "search_server.h"
 
 
 using namespace std;
+
+SearchServer::SearchServer(const string& stop_words_text)
+        : SearchServer::SearchServer(SplitIntoWords(stop_words_text))  // Invoke delegating constructor
+// from string container
+{
+}
 
 void SearchServer::AddDocument(int document_id, const string& document, DocumentStatus status, const vector<int>& ratings) {
     if ((document_id < 0) || (documents_.count(document_id) > 0)) {
@@ -68,6 +75,13 @@ bool SearchServer::IsStopWord(const string& word) const {
     return stop_words_.count(word) > 0;
 }
 
+bool SearchServer::IsValidWord(const string& word) {
+    // A valid word must not contain special characters
+    return none_of(word.begin(), word.end(), [](char c) {
+        return c >= '\0' && c < ' ';
+    });
+}
+
 vector<string> SearchServer::SplitIntoWordsNoStop(const string& text) const {
     vector<string> words;
     for (const string& word : SplitIntoWords(text)) {
@@ -79,6 +93,15 @@ vector<string> SearchServer::SplitIntoWordsNoStop(const string& text) const {
         }
     }
     return words;
+}
+
+int SearchServer::ComputeAverageRating(const vector<int>& ratings) {
+    if (ratings.empty()) {
+        return 0;
+    }
+    int rating_sum = accumulate(ratings.begin(), ratings.end(), 0);
+
+    return rating_sum / static_cast<int>(ratings.size());
 }
 
 SearchServer::QueryWord SearchServer::ParseQueryWord(const string& text) const {

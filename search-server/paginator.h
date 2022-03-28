@@ -38,7 +38,10 @@ template <typename Iterator>
 class Paginator {
 public:
     Paginator(Iterator begin, Iterator end, size_t page_size) {
-        for (size_t left = distance(begin, end); left > 0;) {
+        if (end >= begin && page_size > 0) {
+            throw invalid_argument("Wrong arguments been given."s);
+        } // может вызвать ошибку при тесте в тренажере
+            for (size_t left = distance(begin, end); left > 0;) {
             const size_t current_page_size = min(page_size, left);
             const Iterator current_page_end = next(begin, current_page_size);
             pages_.push_back({begin, current_page_end});

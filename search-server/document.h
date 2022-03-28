@@ -2,7 +2,7 @@
 
 using namespace std;
 
-struct Document; {
+struct Document {
     Document() = default;
 
     Document(int id, double relevance, int rating);

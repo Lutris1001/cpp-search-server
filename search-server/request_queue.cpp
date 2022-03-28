@@ -5,7 +5,7 @@
 
 using namespace std;
 
-explicit RequestQueue::RequestQueue(const SearchServer& search_server)
+RequestQueue::RequestQueue(const SearchServer& search_server)
     : search_server_(search_server)
     {
     }
