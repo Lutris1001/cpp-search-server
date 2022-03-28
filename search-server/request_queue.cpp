@@ -5,6 +5,11 @@
 
 using namespace std;
 
+explicit RequestQueue::RequestQueue(const SearchServer& search_server)
+    : search_server_(search_server)
+    {
+    }
+
 vector<Document> RequestQueue::AddFindRequest(const string& raw_query, DocumentStatus status) {
     StepForNewRequest();
     vector<Document> result = search_server_.FindTopDocuments(raw_query, status);

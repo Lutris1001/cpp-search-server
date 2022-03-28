@@ -5,8 +5,6 @@
 #include "document.h"
 #include "search_server.h"
 
-extern const int MAX_RESULT_DOCUMENT_COUNT;
-extern const double MAX_DELTA_ERROR;
 
 using namespace std;
 

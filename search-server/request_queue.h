@@ -9,18 +9,10 @@ using namespace std;
 
 class RequestQueue {
 public:
-    explicit RequestQueue(const SearchServer& search_server)
-        : search_server_(search_server)
-    {
-    }
+    explicit RequestQueue(const SearchServer& search_server);
 
     template <typename DocumentPredicate>
-    vector<Document> AddFindRequest(const string& raw_query, DocumentPredicate document_predicate) {
-        StepForNewRequest();
-        vector<Document> result = search_server_.FindTopDocuments(raw_query, document_predicate);
-        StepAfterRequest(result);
-        return result;
-    }
+    vector<Document> AddFindRequest(const string& raw_query, DocumentPredicate document_predicate);
 
     vector<Document> AddFindRequest(const string& raw_query, DocumentStatus status);
 
@@ -45,4 +37,12 @@ private:
     
     void StepAfterRequest(const vector<Document>& result);
 };
+
+template <typename DocumentPredicate>
+vector<Document> RequestQueue::AddFindRequest(const string& raw_query, DocumentPredicate document_predicate) {
+    StepForNewRequest();
+    vector<Document> result = search_server_.FindTopDocuments(raw_query, document_predicate);
+    StepAfterRequest(result);
+    return result;
+}
 
