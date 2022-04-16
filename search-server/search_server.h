@@ -32,10 +32,18 @@ public:
     
     int GetDocumentCount() const;
 
-    int GetDocumentId(int index) const;
+    // int GetDocumentId(int index) const;
+    
+    set<int>::const_iterator begin() const;
+    
+    set<int>::const_iterator end() const;
 
     tuple<vector<string>, DocumentStatus> MatchDocument(const string& raw_query, int document_id) const;
 
+    const map<string, double>& GetWordFrequencies(int document_id) const;
+
+    void RemoveDocument(int document_id);
+    
 private:
     struct DocumentData {
         int rating;
@@ -44,8 +52,11 @@ private:
     
     const set<string> stop_words_;
     map<string, map<int, double>> word_to_document_freqs_;
+    map<int, map<string, double>> word_freqs_by_id_;
     map<int, DocumentData> documents_;
-    vector<int> document_ids_;
+    //vector<int> document_ids_;
+    set<int> document_ids_;
+    map<string, double> dummy_;
 
     bool IsStopWord(const string& word) const;
 

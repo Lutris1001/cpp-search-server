@@ -47,4 +47,3 @@ void RequestQueue::StepAfterRequest(const vector<Document>& result) {
     requests_.push_back(request);
 }
     
-

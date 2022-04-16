@@ -45,4 +45,3 @@ vector<Document> RequestQueue::AddFindRequest(const string& raw_query, DocumentP
     StepAfterRequest(result);
     return result;
 }
-
