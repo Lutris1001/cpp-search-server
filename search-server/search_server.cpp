@@ -26,7 +26,6 @@ void SearchServer::AddDocument(int document_id, const string& document, Document
     for (const string& word : words) {
         word_to_document_freqs_[word][document_id] += inv_word_count;
         word_freqs_by_id_[document_id][word] += inv_word_count;
-        //id_to_words_[document_id] = word;
     }
     documents_.emplace(document_id, DocumentData{ComputeAverageRating(ratings), status});
     document_ids_.insert(document_id);
@@ -84,16 +83,16 @@ tuple<vector<string>, DocumentStatus> SearchServer::MatchDocument(const string& 
 
 void SearchServer::RemoveDocument(int document_id) {
     
-        SearchServer::word_freqs_by_id_.erase(document_id);
+        word_freqs_by_id_.erase(document_id);
     
-        SearchServer::documents_.erase(document_id);
+        documents_.erase(document_id);
     
-        SearchServer::document_ids_.erase(document_id);
+        document_ids_.erase(document_id);
     
-    for (const auto& [key, value] : SearchServer::GetWordFrequencies(document_id)) {
-        SearchServer::word_to_document_freqs_.at(key).erase(document_id);
-        if (SearchServer::word_to_document_freqs_.at(key).empty()) {
-            SearchServer::word_to_document_freqs_.erase(key);
+    for (const auto& [key, value] : GetWordFrequencies(document_id)) {
+        word_to_document_freqs_.at(key).erase(document_id);
+        if (word_to_document_freqs_.at(key).empty()) {
+            word_to_document_freqs_.erase(key);
         }
     }
 }
@@ -111,10 +110,11 @@ bool SearchServer::IsValidWord(const string& word) {
 }
 
 const map<string, double>& SearchServer::GetWordFrequencies(int document_id) const {
-    if (SearchServer::word_freqs_by_id_.count(document_id)) {
-        return SearchServer::word_freqs_by_id_.at(document_id);
+    static const map<string, double> dummy_;
+    if (word_freqs_by_id_.count(document_id)) {
+        return word_freqs_by_id_.at(document_id);
     }
-    return SearchServer::dummy_;
+    return dummy_;
 }
 
 

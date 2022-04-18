@@ -18,24 +18,18 @@ class SearchServer {
 public:
     template <typename StringContainer>
     explicit SearchServer(const StringContainer& stop_words);
-
     explicit SearchServer(const string& stop_words_text);
 
     void AddDocument(int document_id, const string& document, DocumentStatus status, const vector<int>& ratings);
 
     template <typename DocumentPredicate>
     vector<Document> FindTopDocuments(const string& raw_query, DocumentPredicate document_predicate) const;
-
     vector<Document> FindTopDocuments(const string& raw_query, DocumentStatus status) const;
-
     vector<Document> FindTopDocuments(const string& raw_query) const;
-    
+
     int GetDocumentCount() const;
 
-    // int GetDocumentId(int index) const;
-    
     set<int>::const_iterator begin() const;
-    
     set<int>::const_iterator end() const;
 
     tuple<vector<string>, DocumentStatus> MatchDocument(const string& raw_query, int document_id) const;
@@ -43,7 +37,7 @@ public:
     const map<string, double>& GetWordFrequencies(int document_id) const;
 
     void RemoveDocument(int document_id);
-    
+
 private:
     struct DocumentData {
         int rating;
@@ -54,9 +48,7 @@ private:
     map<string, map<int, double>> word_to_document_freqs_;
     map<int, map<string, double>> word_freqs_by_id_;
     map<int, DocumentData> documents_;
-    //vector<int> document_ids_;
     set<int> document_ids_;
-    map<string, double> dummy_;
 
     bool IsStopWord(const string& word) const;
 
