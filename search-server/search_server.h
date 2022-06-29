@@ -17,6 +17,7 @@ using namespace std;
 
 const int MAX_RESULT_DOCUMENT_COUNT = 5;
 const double MAX_DELTA_ERROR = 1e-6;
+const int THREAD_COUNT = 4;
 
 class SearchServer {
 public:
@@ -510,7 +511,7 @@ vector<Document> SearchServer::FindAllDocuments(std::execution::parallel_policy 
                                                 const Query& query,
                                                 DocumentPredicate document_predicate) const {
 
-    ConcurrentMap<int, double> document_to_relevance(4); // Argument should be equal to max available threads;
+    ConcurrentMap<int, double> document_to_relevance(THREAD_COUNT); // Argument should be equal to max available threads;
     
     for_each(policy, query.plus_words.begin(), query.plus_words.end(), [this, 
     document_predicate, &document_to_relevance](auto& word){
